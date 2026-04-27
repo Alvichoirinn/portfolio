@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Alvi Choi | Learning Data Analyst</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --accent: #6366f1;
+            --secondary: #f59e0b;
+            --tertiary: #ec489a;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+            background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 50%, #e0e7ff 100%);
+        }
+
+        .text-huge {
+            font-size: clamp(3rem, 12vw, 8rem);
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #6366f1, #ec489a, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(60px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #fef3c7;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #6366f1, #ec489a);
+            border-radius: 10px;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomIn 0.3s ease;
+        }
+
+        .lightbox-img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .lightbox-close:hover {
+            transform: scale(1.2);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="relative overflow-x-hidden">
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <img id="lightbox-img" src="" alt="" class="lightbox-img">
+        </div>
+    </div>
+
+    <!-- Decorative bubbles -->
+    <div class="bubble w-96 h-96 bg-indigo-300 top-20 -left-48"></div>
+    <div class="bubble w-80 h-80 bg-pink-300 bottom-40 -right-40"></div>
+    <div class="bubble w-72 h-72 bg-yellow-300 top-1/2 left-1/3"></div>
+
+    <nav class="fixed top-6 left-0 right-0 z-50 px-6">
+        <div
+            class="max-w-6xl mx-auto glass rounded-2xl px-6 py-3 flex justify-between items-center shadow-xl border border-white/40">
+            <div
+                class="font-extrabold text-2xl tracking-tighter bg-gradient-to-r from-indigo-600 via-pink-500 to-amber-500 bg-clip-text text-transparent">
+                portfolio<span class="text-indigo-600">*</span></div>
+            <div class="hidden md:flex gap-8 text-sm font-semibold text-slate-700">
+                <a href="#home" class="hover:text-indigo-600 transition relative group">Home<span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-pink-500 transition-all group-hover:w-full"></span></a>
+                <a href="#about" class="hover:text-indigo-600 transition relative group">About<span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-pink-500 transition-all group-hover:w-full"></span></a>
+                <a href="#resume" class="hover:text-indigo-600 transition relative group">Resume<span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-pink-500 transition-all group-hover:w-full"></span></a>
+                <a href="#projects" class="hover:text-indigo-600 transition relative group">Projects<span
+                        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-pink-500 transition-all group-hover:w-full"></span></a>
+            </div>
+            <a href="#contact"
+                class="bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-6 py-2 rounded-xl text-sm font-bold hover:shadow-lg transition transform hover:scale-105">Let's
+                Talk</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center px-6 pt-28 pb-16 relative">
+        <div class="max-w-6xl mx-auto w-full relative z-10">
+            <div class="flex flex-col lg:flex-row justify-between items-center gap-12">
+                <div class="flex-1">
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.2] tracking-tight mb-6">
+                        Hello, I'm <br>
+                        <span class="hero-gradient whitespace-nowrap">Alvi Choirinnikmah</span>
+                    </h1>
+                    <p class="text-xl text-slate-600 mb-8 max-w-lg leading-relaxed">
+                        Mahasiswa Sistem Informasi Bisnis yang sedang dalam perjalanan menjadi
+                        <span class="font-bold text-indigo-600">Data Analyst</span>. Masih belajar, tapi siap
+                        berkontribusi.
+                    </p>
+                    <div class="flex gap-4 flex-wrap">
+                        <a href="#projects"
+                            class="bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition transform hover:scale-105 flex items-center gap-2">
+                            View Projects <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#contact"
+                            class="border-2 border-indigo-600 text-indigo-600 px-8 py-4 rounded-xl font-bold hover:bg-indigo-50 transition flex items-center gap-2">
+                            Contact Me <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex-1 flex justify-center">
+                    <div class="relative">
+                        <!-- Gambar tanpa background solid - transparan -->
+                        <div class="relative w-72 h-72 md:w-80 md:h-80">
+                            <img src="gambar.jpg" alt="Alvi Choirinnikmah"
+                                class="w-full h-full object-contain drop-shadow-2xl">
+                        </div>
+                        <!-- Decorative floating elements -->
+                        <div
+                            class="absolute -top-6 -right-6 w-16 h-16 bg-indigo-400 rounded-full opacity-20 blur-xl animate-pulse">
+                        </div>
+                        <div
+                            class="absolute -bottom-8 -left-8 w-24 h-24 bg-pink-400 rounded-full opacity-20 blur-xl animate-pulse delay-75">
+                        </div>
+                        <div class="absolute top-1/2 -right-10 w-8 h-8 bg-amber-400 rounded-full opacity-30 blur-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-20 pt-12 border-t border-white/50">
+                <p class="text-base md:text-lg text-slate-600">
+                    Currently studying at <span class="font-semibold text-indigo-600">D4 Business Information
+                        System</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-28 px-6 bg-white/40 backdrop-blur-sm relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span
+                    class="text-sm font-bold uppercase tracking-wider text-indigo-600 bg-indigo-100 px-4 py-1 rounded-full">About
+                    Me</span>
+                <h2
+                    class="text-4xl md:text-5xl font-bold mt-6 bg-gradient-to-r from-indigo-600 via-pink-500 to-amber-500 bg-clip-text text-transparent">
+                    Who is Alvi Choirinnikmah?</h2>
+            </div>
+
+            <div class="grid grid-cols-1 gap-12">
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-8 shadow-lg border-l-8 border-indigo-500">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-graduation-cap text-3xl text-indigo-600 mr-4"></i>
+                            <h3 class="text-2xl font-bold">Profil</h3>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed text-justify">
+                            Mahasiswa semester 6 Program Studi D-IV Sistem Informasi Bisnis Politeknik Negeri Malang
+                            yang memiliki ketertarikan pada pengolahan data dan penerapan teknologi dalam mendukung
+                            kebutuhan bisnis.
+                            Saya memiliki semangat untuk tumbuh dan berkembang melalui pengalaman baru serta kerja sama
+                            tim yang efektif. Saya berkomitmen untuk berkontribusi dalam mengolah data menjadi informasi
+                            yang akurat dan bermanfaat untuk mendukung kebutuhan bisnis perusahaan.
+                        </p>
+                    </div>
+                    <div class="bg-white rounded-2xl p-8 shadow-lg border-l-8 border-pink-500">
+                        <div class="flex items-baseline mb-4">
+                            <i class="fas fa-heart text-3xl text-indigo-600 mr-4"></i>
+                            <h3 class="text-2xl font-bold">Learning Journey</h3>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">
+                            Saat ini sedang fokus mempelajari Data Analytics, SQL, Python, dan Power BI. Saya percaya
+                            bahwa setiap data memiliki cerita yang bisa membantu bisnis berkembang.
+                        </p>
+                    </div>
+                    <div class="bg-gradient-to-r from-indigo-100 to-pink-100 rounded-2xl p-8">
+                        <h4 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-code"></i> Skills in
+                            Progress</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                class="px-3 py-1 bg-white rounded-full text-sm font-medium text-indigo-600 flex items-center gap-1"><i
+                                    class="fas fa-database"></i> SQL (Learning)</span>
+                            <span
+                                class="px-3 py-1 bg-white rounded-full text-sm font-medium text-pink-600 flex items-center gap-1"><i
+                                    class="fab fa-python"></i> Python (Learning)</span>
+                            <span
+                                class="px-3 py-1 bg-white rounded-full text-sm font-medium text-amber-600 flex items-center gap-1"><i
+                                    class="fas fa-chart-line"></i> Power BI (Learning)</span>
+                            <span
+                                class="px-3 py-1 bg-white rounded-full text-sm font-medium text-indigo-600 flex items-center gap-1"><i
+                                    class="fas fa-file-excel"></i> Excel (Intermediate)</span>
+                            <span
+                                class="px-3 py-1 bg-white rounded-full text-sm font-medium text-pink-600 flex items-center gap-1"><i
+                                    class="fas fa-database"></i> Database Design</span>
+                            <span
+                                class="px-3 py-1 bg-white rounded-full text-sm font-medium text-amber-600 flex items-center gap-1"><i
+                                    class="fas fa-cogs"></i> Business Process</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Section: Education & Experience -->
+    <section id="resume" class="py-28 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span
+                    class="text-sm font-bold uppercase tracking-wider text-indigo-600 bg-indigo-100 px-4 py-1 rounded-full">Resume</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-6">Education & <span
+                        class="bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">Experience</span>
+                </h2>
+            </div>
+
+            <div class="flex flex-col space-y-12">
+                <!-- Education Section -->
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center"><i
+                                class="fas fa-graduation-cap text-indigo-600 text-xl"></i></div>
+                        <h3 class="text-2xl font-bold">Education</h3>
+                    </div>
+
+                    <div class="flex gap-6 flex-wrap">
+                        <div class="bg-white rounded-2xl p-6 shadow-lg card-hover flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="text-xl font-bold text-indigo-600">D-IV Sistem Informasi Bisnis</h4>
+                                <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">2023 -
+                                    Present</span>
+                            </div>
+                            <p class="text-slate-500 mb-2">Politeknik Negeri Malang</p>
+                            <p class="text-slate-600 text-sm leading-relaxed">Semester 6 | IPK Sementara: 3.85/4.00</p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
+                                        class="fas fa-chart-line text-indigo-600"></i> Bussiness Intelligence</span>
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
+                                        class="fas fa-search text-pink-600"></i> Data Mining</span>
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
+                                        class="fas fa-calculator text-amber-600"></i> Statistika</span>
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
+                                        class="fas fa-server text-indigo-600"></i> Big Data</span>
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
+                                        class="fas fa-warehouse text-pink-600"></i> Data Warehouse</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl p-6 shadow-lg card-hover flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="text-xl font-bold text-pink-600">Otomatisasi dan Tata Kelola Perkantoran</h4>
+                                <span class="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">2019 -
+                                    2023</span>
+                            </div>
+                            <p class="text-slate-500 mb-2">SMK Negeri 2 Blitar</p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
+                                        class="fas fa-money-bill-wave text-indigo-600"></i> Keaungan</span>
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
+                                        class="fas fa-clipboard-list text-pink-600"></i> Administrasi</span>
+                                <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
+                                        class="fas fa-folder-open text-amber-600"></i> Kearsipan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Section -->
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center"><i
+                                class="fas fa-briefcase text-pink-600 text-xl"></i></div>
+                        <h3 class="text-2xl font-bold">Experience PKL</h3>
+                    </div>
+                    <div class="flex gap-6 flex-wrap">
+                        <div class="bg-white rounded-2xl p-6 shadow-lg card-hover flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="text-xl font-bold text-pink-600">Dinas Perpustakaan dan Kearsipan</h4>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">2021</span>
+                            </div>
+                            <ul class="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
+                                <li>Pekerjaan yang saya lakukan selama pkl adalah</li>
+                                <li>Melakukan pengolahan fisik buku meliputi kodifikasi barcode dan perlengkapan</li>
+                                <li>Entry data buku ke sistem</li>
+                                <li>Mengorganisasikan penataan pada rak (shelving) berdasarkan sistem klasifikasi</li>
+                                <li>Mendokumentasikan agenda sebagai publikasi dan pengarsipan</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-2xl p-6 shadow-lg card-hover flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="text-xl font-bold text-amber-600 mb-2">DPRD</h4>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">2022</span>
+                            </div>
+                            <ul class="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
+                                <li>Membantu proses administrasi di resepsionis dalam menangani surat masuk dan
+                                    komunikasi internal</li>
+                                <li>Melakukan pengarsipan dan pengorganisasian dokumen untuk agenda surat masuk dan
+                                    keluar</li>
+                                <li>Memasukkan dan mengelola data menggunakan Microsoft Excel untuk keperluan pelaporan
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Mini Documentation -->
+                <div class="mt-10">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center"><i
+                                    class="fas fa-camera-retro text-pink-600 text-xl"></i></div>
+                            <div>
+                                <h3 class="text-2xl font-bold">Bukti Kegiatan</h3>
+                                <p class="text-slate-500 text-sm">Dokumentasi Experience dalam grid yang rapi.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white rounded-3xl p-6 shadow-xl border border-white/50 card-hover cursor-pointer"
+                            onclick="openLightbox('arsip.jpeg')">
+                            <div class="block rounded-2xl overflow-hidden mb-4 h-48">
+                                <img src="arsip.jpeg" alt="Dokumentasi Perpustakaan"
+                                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                            </div>
+                            <p class="text-sm font-semibold text-indigo-600 mb-2">Perpustakaan & Kearsipan</p>
+                            <p class="text-slate-600 text-sm">Entry data buku dan pengolahan fisik koleksi.</p>
+                        </div>
+                        <div class="bg-white rounded-3xl p-6 shadow-xl border border-white/50 card-hover cursor-pointer"
+                            onclick="openLightbox('entry.jpeg')">
+                            <div class="block rounded-2xl overflow-hidden mb-4 h-48">
+                                <img src="entry.jpeg" alt="Dokumentasi Pengarsipan"
+                                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                            </div>
+                            <p class="text-sm font-semibold text-indigo-600 mb-2">Pengarsipan dan Publikasi</p>
+                            <p class="text-slate-600 text-sm">Mendokumentasikan agenda dan menyusun publikasi.</p>
+                        </div>
+                        <div class="bg-white rounded-3xl p-6 shadow-xl border border-white/50 card-hover cursor-pointer"
+                            onclick="openLightbox('entry1.jpeg')">
+                            <div class="block rounded-2xl overflow-hidden mb-4 h-48">
+                                <img src="entry1.jpeg" alt="Dokumentasi DPRD"
+                                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                            </div>
+                            <p class="text-sm font-semibold text-indigo-600 mb-2">DPRD - Administrasi</p>
+                            <p class="text-slate-600 text-sm">Menangani surat masuk dan komunikasi internal.</p>
+                        </div>
+                        <div class="bg-white rounded-3xl p-6 shadow-xl border border-white/50 card-hover cursor-pointer"
+                            onclick="openLightbox('gambar.jpg')">
+                            <div class="block rounded-2xl overflow-hidden mb-4 h-48">
+                                <img src="perpustakaan.png" alt="Dokumentasi Excel"
+                                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                            </div>
+                            <p class="text-sm font-semibold text-indigo-600 mb-2">DPRD - Data Excel</p>
+                            <p class="text-slate-600 text-sm">Pengelolaan data dan pelaporan menggunakan Excel.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center"><i
+                                class="fas fa-users text-indigo-600 text-xl"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold">Organization</h3>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 flex-wrap">
+                        <div class="bg-white rounded-2xl p-6 shadow-lg card-hover flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="text-xl font-bold text-indigo-600">UKM Bhakti Kharya Mahasiswa</h4>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">2023 -
+                                    2025</span>
+                            </div>
+                            <p class="text-sm font-semibold text-amber-600 mb-3">Bendahara | Bunga Wisuda</p>
+                            <ul class="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
+                                <li>Menyusun dan mengelola anggaran dana kegiatan</li>
+                                <li>Mencatat pemasukan dan pengeluaran dana</li>
+                                <li>Menyusun laporan keuangan sederhana untuk transparansi</li>
+                                <li>Bekerja sama dengan tim dalam program kerja</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white rounded-3xl p-6 shadow-xl border border-white/50 card-hover cursor-pointer flex-1 min-w-0"
+                            onclick="openLightbox('ukm.jpeg')">
+                            <div class="block rounded-2xl overflow-hidden mb-4 h-48">
+                                <img src="ukm.jpeg" alt="Dokumentasi UKM"
+                                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                            </div>
+                            <p class="text-sm font-semibold text-indigo-600 mb-1">UKM Bhakti Kharya Mahasiswa</p>
+                            <p class="text-xs font-bold text-amber-600 mb-1">Bendahara | Bunga Wisuda</p>
+                            <p class="text-xs text-slate-500">Nov 2023 - 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-28 px-6 bg-gradient-to-b from-white/60 to-transparent">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span
+                    class="text-sm font-bold uppercase tracking-wider text-indigo-600 bg-indigo-100 px-4 py-1 rounded-full">Portfolio</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-6">Featured <span
+                        class="bg-gradient-to-r from-indigo-600 via-pink-500 to-amber-500 bg-clip-text text-transparent">Projects</span>
+                </h2>
+                <p class="text-slate-600 mt-4 max-w-2xl mx-auto">Beberapa proyek yang sudah saya kerjakan selama masa
+                    studi dan pembelajaran mandiri.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
+                    <div class="h-56 overflow-hidden">
+                        <img src="sistem_prestasi.png" alt="Sistem Prestasi Mahasiswa"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-pink-600 bg-pink-100 px-2 py-1 rounded">Implementasi
+                                Website</span>
+                            <a href="/project/2" class="text-slate-300 group-hover:text-pink-600 transition"><i
+                                    class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Sistem Prestasi Mahasiswa</h3>
+                        <p class="text-slate-500 text-sm mb-4 flex-grow">Perancangan sistem informasi prestasi
+                            mahasiswa.</p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Laravel</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">CSS</span>
+                        </div>
+                        <a href="/project/2" class="text-pink-600 font-semibold text-sm hover:underline">Lihat Penugasan
+                            →</a>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
+                    <div class="h-56 overflow-hidden">
+                        <img src="tracerstudy.png" alt="Sistem Tracer Study"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">Implementasi Website</span>
+                            <a href="/project/3" class="text-slate-300 group-hover:text-amber-600 transition"><i
+                                    class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Sistem Tracer Study</h3>
+                        <p class="text-slate-500 text-sm mb-4 flex-grow">Tracar Study bertujuan melacak atau mengidentifikasi jejak atau perkembangan karier alumni setelah mereka lulus dari perguruan tinggi.</p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Laravel</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">HTML</span>
+                        </div>
+                        <a href="/project/3" class="text-amber-600 font-semibold text-sm hover:underline">Lihat
+                            Penugasan →</a>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
+                    <div class="h-56 overflow-hidden">
+                        <img src="pos.png" alt="Admin LTE POS"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded">Implementasi Website</span>
+                            <a href="/project/4" class="text-slate-300 group-hover:text-indigo-600 transition"><i
+                                    class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Tracer Study Analysis</h3>
+                        <p class="text-slate-500 text-sm mb-4 text-justify flex-grow">Analisis data tracer study
+                            alumni menggunakan Power BI untuk melihattingkat keberhasilan lulusan.</p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Power BI</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Excel</span>
+                        </div>
+                        <a href="/project/4" class="text-indigo-600 font-semibold text-sm hover:underline">Lihat
+                            Penugasan →</a>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
+                    <div class="h-56 overflow-hidden">
+                        <img src="websitek3.png" alt="Sistem Kesehatan dan Keselamatan Kerja"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">Sistem Kesehatan dan Keselamatan Kerja</span>
+                            <a href="/project/5" class="text-slate-300 group-hover:text-amber-600 transition"><i
+                                    class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Sistem Kesehatan dan Keselamatan Kerja</h3>
+                        <p class="text-slate-500 text-sm mb-4 flex-grow">Perancangan Proyek Sistem Kesehatan dan Keselamatan Kerja untuk memenuhi kebutuhan kesehatan dan keselamatan kerja dengan studi kasus yang ada di perusahaan PT Petro Kimia Gresik.</p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">HTML</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">CSS</span>
+                        </div>
+                        <a href="/project/5" class="text-amber-600 font-semibold text-sm hover:underline">Lihat
+                            Penugasan →</a>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
+                    <div class="h-56 overflow-hidden">
+                        <img src="image.png" alt="Sistem Entry Data"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-pink-600 bg-pink-100 px-2 py-1 rounded">Data
+                                Management</span>
+                            <a href="/project/6" class="text-slate-300 group-hover:text-pink-600 transition"><i
+                                    class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Sistem Entry Data</h3>
+                        <p class="text-slate-500 text-sm mb-4 flex-grow">Pengembangan sistem entry data
+                            untuk otomatisasi proses penginputan data perusahaan.</p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Python</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Excel</span>
+                        </div>
+                        <a href="/project/6" class="text-pink-600 font-semibold text-sm hover:underline">Lihat Penugasan
+                            →</a>
+                    </div>
+
+                   
+                </div>
+                 <!-- Project 6 -->
+                     <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
+                    <div class="h-56 overflow-hidden">
+                        <img src="dashboard.png" alt="Dashboard HRIS"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded">Data
+                                Visualization</span>
+                            <a href="/project/1" class="text-slate-300 group-hover:text-indigo-600 transition"><i
+                                    class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Dashboard HRIS</h3>
+                        <p class="text-slate-500 text-sm mb-4 text-justify flex-grow">Visualisasi data performa
+                            menggunakan Power
+                            BI untuk
+                            mengetahui income, performance, dan kinerja karyawan dari setiap departemen.</p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Power BI</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Excel</span>
+                        </div>
+                        <a href="/project/1" class="text-indigo-600 font-semibold text-sm hover:underline">Lihat
+                            Penugasan →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#"
+                    class="inline-flex items-center gap-2 text-indigo-600 font-bold border-b-2 border-indigo-600 pb-1 hover:gap-3 transition">
+                    Lihat Semua Proyek <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6">
+        <div
+            class="max-w-5xl mx-auto bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 rounded-3xl p-12 text-white text-center relative overflow-hidden shadow-2xl">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-500/20 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-pink-500/20 blur-3xl"></div>
+            <div class="relative z-10">
+                <i class="fas fa-paper-plane text-4xl mb-6 text-amber-400"></i>
+                <h2 class="text-5xl md:text-6xl font-bold mb-6">Let's Connect!</h2>
+                <p class="text-xl text-slate-300 mb-8 max-w-lg mx-auto">Saya terbuka untuk kesempatan belajar,
+                    kolaborasi proyek, atau sekadar diskusi seputar data dan bisnis.</p>
+                <div class="flex flex-col md:flex-row justify-center gap-4 relative z-20">
+                    <a href="mailto:choialvi9@gmail.com"
+                        class="bg-white text-indigo-900 px-8 py-4 rounded-xl font-bold hover:bg-amber-400 hover:text-black transition shadow-lg cursor-pointer">
+                        <i class="fas fa-envelope mr-2"></i> choialvi9@gmail.com
+                    </a>
+                    <a href="https://www.linkedin.com/in/alvi-choirinnikmah-a3a579322" target="_blank"
+                        class="border-2 border-white/30 px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition cursor-pointer">
+                        <i class="fab fa-linkedin mr-2"></i> LinkedIn
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 border-t border-white/30 bg-white/50">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p class="text-sm text-slate-500">© 2026 Alvi Choirinnikmah — D-IV Sistem Informasi Bisnis | Polinteknik
+                Negeri Malang</p>
+            <div class="flex gap-6">
+                <a href="https://www.linkedin.com/in/alvi-choirinnikmah-a3a579322"
+                    class="text-slate-400 hover:text-indigo-600 transition text-xl"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/Alvichoirinn?tab=repositories" target="_blank"
+                    class="text-slate-400 hover:text-indigo-600 transition text-xl"><i class="fab fa-github"></i></a>
+                <a href="https://www.instagram.com/alvi1924?igsh=MWpvNWl4NmU4cmxsdg=="
+                    class="text-slate-400 hover:text-pink-600 transition text-xl"><i class="fab fa-instagram"></i></a>
+
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const miniCarousel = document.getElementById('mini-carousel');
+        const miniCarouselWrapper = document.getElementById('mini-carousel-wrapper');
+        const miniSlides = miniCarousel ? Array.from(miniCarousel.children) : [];
+        const miniDots = [
+            document.getElementById('mini-dot-0'),
+            document.getElementById('mini-dot-1'),
+            document.getElementById('mini-dot-2'),
+            document.getElementById('mini-dot-3')
+        ];
+        let miniIndex = 0;
+        let miniInterval = null;
+
+        function updateMiniCarousel() {
+            if (!miniCarousel || miniSlides.length === 0) return;
+            const slideWidth = miniSlides[0].offsetWidth + 16;
+            miniCarousel.style.transform = `translateX(-${miniIndex * slideWidth}px)`;
+            miniDots.forEach((dot, idx) => {
+                if (!dot) return;
+                dot.classList.toggle('bg-indigo-600', idx === miniIndex);
+                dot.classList.toggle('bg-slate-300', idx !== miniIndex);
+            });
+        }
+
+        function miniNext() {
+            if (miniSlides.length === 0) return;
+            miniIndex = (miniIndex + 1) % miniSlides.length;
+            updateMiniCarousel();
+        }
+
+        function miniPrev() {
+            if (miniSlides.length === 0) return;
+            miniIndex = (miniIndex - 1 + miniSlides.length) % miniSlides.length;
+            updateMiniCarousel();
+        }
+
+        function setMiniSlide(index) {
+            miniIndex = index;
+            updateMiniCarousel();
+        }
+
+        function startMiniAutoScroll() {
+            if (miniInterval) return;
+            miniInterval = setInterval(miniNext, 4500);
+        }
+
+        function stopMiniAutoScroll() {
+            if (miniInterval) {
+                clearInterval(miniInterval);
+                miniInterval = null;
+            }
+        }
+
+        if (miniCarouselWrapper) {
+            miniCarouselWrapper.addEventListener('mouseenter', stopMiniAutoScroll);
+            miniCarouselWrapper.addEventListener('mouseleave', startMiniAutoScroll);
+        }
+
+        window.addEventListener('resize', updateMiniCarousel);
+        updateMiniCarousel();
+        startMiniAutoScroll();
+    </script>
+</body>
+
+</html>
