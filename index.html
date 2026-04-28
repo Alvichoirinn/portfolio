@@ -141,6 +141,82 @@
                 opacity: 1;
             }
         }
+
+        /* Update CSS di bagian Style agar serasi dengan rasio portrait */
+        .frame-estetik {
+            position: relative;
+            padding: 10px;
+            /* Lebih tebal sedikit */
+            border-radius: 32px;
+            /* Lebih membulat (Rounded besar) agar terlihat modern - ditingkatkan dari 28px */
+            background: linear-gradient(135deg, #6366f1 0%, #ec489a 45%, #f59e0b 100%);
+            background-size: 150% 150%;
+            box-shadow: 0 25px 45px rgba(99, 102, 241, 0.35), 0 10px 20px rgba(0, 0, 0, 0.05);
+            /* Bayangan lebih difus/menyebar + layered */
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        /* Sedikit efek miring + scale saat hover untuk kesan dinamis */
+        .frame-estetik:hover {
+            transform: rotate(-1.5deg) scale(1.02);
+            box-shadow: 0 30px 55px rgba(99, 102, 241, 0.45), 0 15px 25px rgba(0, 0, 0, 0.08);
+            background: linear-gradient(135deg, #8183f5 0%, #f062b6 45%, #f7b05e 100%);
+            background-size: 150% 150%;
+        }
+
+        .frame-estetik-inner {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 26px;
+            /* Lebih membulat agar serasi dengan pembungkusnya - ditingkatkan dari 22px */
+            padding: 6px;
+            overflow: hidden;
+            /* Pastikan foto tidak "bocor" keluar dari sudut yang membulat */
+            transition: all 0.2s ease;
+        }
+
+        /* Pastikan gambar portrait tetap proporsional dengan object-fit cover */
+        .frame-estetik img {
+            border-radius: 22px;
+            /* membulatkan sudut foto agar seamless dengan frame dalam */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Memastikan rasio portrait tertangani dengan baik, foto terisi penuh tanpa distorsi berlebihan */
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        /* Efek tambahan: sedikit zoom halus pada foto saat hover frame */
+        .frame-estetik:hover .frame-estetik-inner img {
+            transform: scale(1.02);
+        }
+
+        /* Wrapper opsional untuk memberikan efek glow di belakang frame */
+        .frame-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .frame-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 104%;
+            height: 104%;
+            background: radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.25), rgba(236, 72, 153, 0.12), transparent 70%);
+            border-radius: 42px;
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .frame-wrapper:hover::before {
+            opacity: 0.9;
+        }
     </style>
 </head>
 
@@ -192,9 +268,8 @@
                         <span class="hero-gradient whitespace-nowrap">Alvi Choirinnikmah</span>
                     </h1>
                     <p class="text-xl text-slate-600 mb-8 max-w-lg leading-relaxed">
-                        Mahasiswa Sistem Informasi Bisnis yang sedang dalam perjalanan menjadi
-                        <span class="font-bold text-indigo-600">Data Analyst</span>. Masih belajar, tapi siap
-                        berkontribusi.
+                        Mahasiswa
+                        <span class="font-bold text-indigo-600">Teknologi Informasi</span>. yang berdedikasi dan mengembangkan potensi diri dalam ekosistem teknologi informasi. 
                     </p>
                     <div class="flex gap-4 flex-wrap">
                         <a href="#projects"
@@ -209,19 +284,25 @@
                 </div>
                 <div class="flex-1 flex justify-center">
                     <div class="relative">
-                        <!-- Gambar tanpa background solid - transparan -->
-                        <div class="relative w-72 h-72 md:w-80 md:h-80">
-                            <img src="gambar.jpg" alt="Alvi Choirinnikmah"
-                                class="w-full h-full object-contain drop-shadow-2xl">
+                        <div class="frame-estetik relative">
+                            <!-- Gambar tanpa background solid - transparan -->
+                            <div class="frame-estetik-inner w-64 h-80 md:w-72 md:h-96">
+                                <img src="foto1.png" alt="Alvi Choirinnikmah"
+                                    class="w-full h-full object-cover dshadow-inner">
+                            </div>
                         </div>
-                        <!-- Decorative floating elements -->
+                        <!-- Decorative floating elements with enhanced animations -->
                         <div
                             class="absolute -top-6 -right-6 w-16 h-16 bg-indigo-400 rounded-full opacity-20 blur-xl animate-pulse">
                         </div>
                         <div
                             class="absolute -bottom-8 -left-8 w-24 h-24 bg-pink-400 rounded-full opacity-20 blur-xl animate-pulse delay-75">
                         </div>
-                        <div class="absolute top-1/2 -right-10 w-8 h-8 bg-amber-400 rounded-full opacity-30 blur-lg">
+                        <div
+                            class="absolute top-1/2 -right-10 w-8 h-8 bg-amber-400 rounded-full opacity-30 blur-lg animate-bounce-slow">
+                        </div>
+                        <div
+                            class="absolute bottom-1/4 -left-12 w-10 h-10 bg-purple-400 rounded-full opacity-20 blur-xl animate-ping-slow">
                         </div>
                     </div>
                 </div>
@@ -229,8 +310,7 @@
 
             <div class="text-center mt-20 pt-12 border-t border-white/50">
                 <p class="text-base md:text-lg text-slate-600">
-                    Currently studying at <span class="font-semibold text-indigo-600">D4 Business Information
-                        System</span>
+                    Currently studying at <span class="font-semibold text-indigo-600">D-IV Business Information System</span>
                 </p>
             </div>
         </div>
@@ -331,7 +411,7 @@
                                     Present</span>
                             </div>
                             <p class="text-slate-500 mb-2">Politeknik Negeri Malang</p>
-                            <p class="text-slate-600 text-sm leading-relaxed">Semester 6 | IPK Sementara: 3.85/4.00</p>
+                            <p class="text-slate-600 text-sm leading-relaxed">Semester 6</p>
                             <div class="mt-3 flex flex-wrap gap-2">
                                 <span class="text-xs bg-slate-100 px-2 py-1 rounded flex items-center gap-1"><i
                                         class="fas fa-chart-line text-indigo-600"></i> Bussiness Intelligence</span>
@@ -379,7 +459,6 @@
                                 <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">2021</span>
                             </div>
                             <ul class="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
-                                <li>Pekerjaan yang saya lakukan selama pkl adalah</li>
                                 <li>Melakukan pengolahan fisik buku meliputi kodifikasi barcode dan perlengkapan</li>
                                 <li>Entry data buku ke sistem</li>
                                 <li>Mengorganisasikan penataan pada rak (shelving) berdasarkan sistem klasifikasi</li>
@@ -393,10 +472,9 @@
                                 <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">2022</span>
                             </div>
                             <ul class="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
-                                <li>Membantu proses administrasi di resepsionis dalam menangani surat masuk dan
-                                    komunikasi internal</li>
+                                <li>Membantu proses administrasi di resepsionis dalam menangani surat masuk</li>
                                 <li>Melakukan pengarsipan dan pengorganisasian dokumen untuk agenda surat masuk dan
-                                    keluar</li>
+                                    surat keluar</li>
                                 <li>Memasukkan dan mengelola data menggunakan Microsoft Excel untuk keperluan pelaporan
                                 </li>
                             </ul>
@@ -424,8 +502,7 @@
                                 <img src="arsip.jpeg" alt="Dokumentasi Perpustakaan"
                                     class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                             </div>
-                            <p class="text-sm font-semibold text-indigo-600 mb-2">Perpustakaan & Kearsipan</p>
-                            <p class="text-slate-600 text-sm">Entry data buku dan pengolahan fisik koleksi.</p>
+                            <p class="text-slate-600 text-sm">Pengarsipan Agenda Surat Masuk </p>
                         </div>
                         <div class="bg-white rounded-3xl p-6 shadow-xl border border-white/50 card-hover cursor-pointer"
                             onclick="openLightbox('entry.jpeg')">
@@ -433,8 +510,7 @@
                                 <img src="entry.jpeg" alt="Dokumentasi Pengarsipan"
                                     class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                             </div>
-                            <p class="text-sm font-semibold text-indigo-600 mb-2">Pengarsipan dan Publikasi</p>
-                            <p class="text-slate-600 text-sm">Mendokumentasikan agenda dan menyusun publikasi.</p>
+                            <p class="text-slate-600 text-sm">Melakukan entry surat masuk pada sistem</p>
                         </div>
                         <div class="bg-white rounded-3xl p-6 shadow-xl border border-white/50 card-hover cursor-pointer"
                             onclick="openLightbox('entry1.jpeg')">
@@ -442,8 +518,7 @@
                                 <img src="entry1.jpeg" alt="Dokumentasi DPRD"
                                     class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                             </div>
-                            <p class="text-sm font-semibold text-indigo-600 mb-2">DPRD - Administrasi</p>
-                            <p class="text-slate-600 text-sm">Menangani surat masuk dan komunikasi internal.</p>
+                            <p class="text-slate-600 text-sm">Pengelolaan data dan pelaporan menggunakan Excel</p>
                         </div>
                         <div class="bg-white rounded-3xl p-6 shadow-xl border border-white/50 card-hover cursor-pointer"
                             onclick="openLightbox('gambar.jpg')">
@@ -451,8 +526,7 @@
                                 <img src="perpustakaan.png" alt="Dokumentasi Excel"
                                     class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                             </div>
-                            <p class="text-sm font-semibold text-indigo-600 mb-2">DPRD - Data Excel</p>
-                            <p class="text-slate-600 text-sm">Pengelolaan data dan pelaporan menggunakan Excel.</p>
+                            <p class="text-slate-600 text-sm">Melakukan pengolahan fisik buku</p>
                         </div>
                     </div>
                 </div>
@@ -512,136 +586,149 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Project 1 -->
                 <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
-                    <div class="h-56 overflow-hidden">
+                    <div class="h-55 flex items-center justify-center bg-slate-50 overflow-hidden">
                         <img src="sistem_prestasi.png" alt="Sistem Prestasi Mahasiswa"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="flex justify-between items-start mb-3">
                             <span class="text-xs font-bold text-pink-600 bg-pink-100 px-2 py-1 rounded">Implementasi
                                 Website</span>
-                            <a href="/project/2" class="text-slate-300 group-hover:text-pink-600 transition"><i
+                            <a href="https://github.com/Alvichoirinn/final-project-group-3.git"
+                                class="text-slate-300 group-hover:text-pink-600 transition"><i
                                     class="fas fa-external-link-alt"></i></a>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Sistem Prestasi Mahasiswa</h3>
-                        <p class="text-slate-500 text-sm mb-4 flex-grow">Perancangan sistem informasi prestasi
-                            mahasiswa.</p>
+                        <p class="text-slate-500 text-sm mb-4 text-justify  flex-grow">Perancangan sistem informasi
+                            prestasi
+                            mahasiswa berbasis web dengan menggunakan Laravel.</p>
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">Laravel</span>
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">CSS</span>
                         </div>
-                        <a href="/project/2" class="text-pink-600 font-semibold text-sm hover:underline">Lihat Penugasan
+                        <a href="https://github.com/Alvichoirinn/final-project-group-3.git"
+                            class="text-pink-600 font-semibold text-sm hover:underline">Lihat Penugasan
                             →</a>
                     </div>
                 </div>
 
                 <!-- Project 2 -->
                 <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
-                    <div class="h-56 overflow-hidden">
+                    <div class="h-54 overflow-hidden">
                         <img src="tracerstudy.png" alt="Sistem Tracer Study"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">Implementasi Website</span>
-                            <a href="/project/3" class="text-slate-300 group-hover:text-amber-600 transition"><i
+                            <span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">Implementasi
+                                Website</span>
+                            <a href="https://github.com/Alvichoirinn/PBL_TracerStudy.git"
+                                class="text-slate-300 group-hover:text-amber-600 transition"><i
                                     class="fas fa-external-link-alt"></i></a>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Sistem Tracer Study</h3>
-                        <p class="text-slate-500 text-sm mb-4 flex-grow">Tracar Study bertujuan melacak atau mengidentifikasi jejak atau perkembangan karier alumni setelah mereka lulus dari perguruan tinggi.</p>
+                        <p class="text-slate-500 text-sm mb-4 text-justify  flex-grow">Tracar Study bertujuan melacak
+                            atau mengidentifikasi jejak atau perkembangan karier alumni setelah mereka lulus dari
+                            perguruan tinggi.</p>
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">Laravel</span>
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">HTML</span>
                         </div>
-                        <a href="/project/3" class="text-amber-600 font-semibold text-sm hover:underline">Lihat
+                        <a href="https://github.com/Alvichoirinn/PBL_TracerStudy.git" class="text-amber-600 font-semibold text-sm hover:underline">Lihat
                             Penugasan →</a>
                     </div>
                 </div>
 
                 <!-- Project 3 -->
                 <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
-                    <div class="h-56 overflow-hidden">
+                    <div class="h-54 overflow-hidden">
                         <img src="pos.png" alt="Admin LTE POS"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded">Implementasi Website</span>
-                            <a href="/project/4" class="text-slate-300 group-hover:text-indigo-600 transition"><i
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded">Implementasi
+                                Website</span>
+                            <a href="https://github.com/Alvichoirinn/PWL_POS1.git"
+                                class="text-slate-300 group-hover:text-indigo-600 transition"><i
                                     class="fas fa-external-link-alt"></i></a>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Tracer Study Analysis</h3>
-                        <p class="text-slate-500 text-sm mb-4 text-justify flex-grow">Analisis data tracer study
-                            alumni menggunakan Power BI untuk melihattingkat keberhasilan lulusan.</p>
+                        <h3 class="text-xl font-bold mb-2">Admin LTE POS</h3>
+                        <p class="text-slate-500 text-sm mb-4 text-justify flex-grow">Admin LTE POS bertujuan untuk
+                            memudahkan pengelolaan transaksi dan data penjualan di sebuah toko.</p>
                         <div class="flex gap-2 mb-4">
-                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Power BI</span>
-                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Excel</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Bootstrap</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">Laravel</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">HTML</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded">CSS</span>
                         </div>
-                        <a href="/project/4" class="text-indigo-600 font-semibold text-sm hover:underline">Lihat
+                        <a href="https://github.com/Alvichoirinn/PWL_POS1.git" class="text-indigo-600 font-semibold text-sm hover:underline">Lihat
                             Penugasan →</a>
                     </div>
                 </div>
 
-                <!-- Project 5 -->
+                <!-- Project 4 -->
                 <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
-                    <div class="h-56 overflow-hidden">
+                    <div class="h-54 overflow-hidden">
                         <img src="websitek3.png" alt="Sistem Kesehatan dan Keselamatan Kerja"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">Sistem Kesehatan dan Keselamatan Kerja</span>
-                            <a href="/project/5" class="text-slate-300 group-hover:text-amber-600 transition"><i
+                            <span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">Sistem
+                                Kesehatan dan Keselamatan Kerja</span>
+                            <a href="https://github.com/Alvichoirinn/website-k3.git"
+                                class="text-slate-300 group-hover:text-amber-600 transition"><i
                                     class="fas fa-external-link-alt"></i></a>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Sistem Kesehatan dan Keselamatan Kerja</h3>
-                        <p class="text-slate-500 text-sm mb-4 flex-grow">Perancangan Proyek Sistem Kesehatan dan Keselamatan Kerja untuk memenuhi kebutuhan kesehatan dan keselamatan kerja dengan studi kasus yang ada di perusahaan PT Petro Kimia Gresik.</p>
+                        <p class="text-slate-500 text-sm mb-4 flex-grow">Perancangan Proyek Sistem Kesehatan dan
+                            Keselamatan Kerja untuk memenuhi kebutuhan kesehatan dan keselamatan kerja dengan studi
+                            kasus yang ada di perusahaan PT Petro Kimia Gresik.</p>
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">HTML</span>
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">CSS</span>
                         </div>
-                        <a href="/project/5" class="text-amber-600 font-semibold text-sm hover:underline">Lihat
+                        <a href="https://github.com/Alvichoirinn/website-k3.git" class="text-amber-600 font-semibold text-sm hover:underline">Lihat
                             Penugasan →</a>
                     </div>
                 </div>
 
                 <!-- Project 5 -->
                 <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
-                    <div class="h-56 overflow-hidden">
-                        <img src="image.png" alt="Sistem Entry Data"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="h-54 overflow-hidden">
+                        <img src="datamining.jpeg" alt="Sistem Entry Data"
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-bold text-pink-600 bg-pink-100 px-2 py-1 rounded">Data
-                                Management</span>
-                            <a href="/project/6" class="text-slate-300 group-hover:text-pink-600 transition"><i
+                            <span class="text-xs font-bold text-pink-600 bg-pink-100 px-2 py-1 rounded">Project UAS Data
+                                Mining</span>
+                            <a href="https://colab.research.google.com/drive/1ckc8dkJCwtxbhy_Oao6PCnhovK1YFazi?usp=sharing" class="text-slate-300 group-hover:text-pink-600 transition"><i
                                     class="fas fa-external-link-alt"></i></a>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Sistem Entry Data</h3>
-                        <p class="text-slate-500 text-sm mb-4 flex-grow">Pengembangan sistem entry data
-                            untuk otomatisasi proses penginputan data perusahaan.</p>
+                        <h3 class="text-xl font-bold mb-2">Data Mining</h3>
+                        <p class="text-slate-500 text-sm mb-4 text-justify  flex-grow">Implementasi teknik data mining dan clustering untuk mengidentifikasi pola strategis serta performa data guna mendukung pengambilan keputusan berbasis informasi studi kasus dataset MovieLens.</p>
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">Python</span>
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">Excel</span>
                         </div>
-                        <a href="/project/6" class="text-pink-600 font-semibold text-sm hover:underline">Lihat Penugasan
+                        <a href="https://colab.research.google.com/drive/1ckc8dkJCwtxbhy_Oao6PCnhovK1YFazi?usp=sharing" class="text-pink-600 font-semibold text-sm hover:underline">Lihat Penugasan
                             →</a>
                     </div>
 
-                   
                 </div>
-                 <!-- Project 6 -->
-                     <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
-                    <div class="h-56 overflow-hidden">
+                <!-- Project 6 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover group flex flex-col h-full">
+                    <div class="h-55 flex items-center justify-center bg-slate-50 overflow-hidden">
                         <img src="dashboard.png" alt="Dashboard HRIS"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300">
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <div class="flex justify-between items-start mb-3">
                             <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded">Data
                                 Visualization</span>
-                            <a href="/project/1" class="text-slate-300 group-hover:text-indigo-600 transition"><i
+                            <a href="/project/6" class="text-slate-300 group-hover:text-indigo-600 transition"><i
                                     class="fas fa-external-link-alt"></i></a>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Dashboard HRIS</h3>
@@ -653,7 +740,7 @@
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">Power BI</span>
                             <span class="text-xs bg-slate-100 px-2 py-1 rounded">Excel</span>
                         </div>
-                        <a href="/project/1" class="text-indigo-600 font-semibold text-sm hover:underline">Lihat
+                        <a href="/project/6" class="text-indigo-600 font-semibold text-sm hover:underline">Lihat
                             Penugasan →</a>
                     </div>
                 </div>
@@ -695,7 +782,7 @@
 
     <footer class="py-12 border-t border-white/30 bg-white/50">
         <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p class="text-sm text-slate-500">© 2026 Alvi Choirinnikmah — D-IV Sistem Informasi Bisnis | Polinteknik
+            <p class="text-sm text-slate-500">© 2026 Alvi Choirinnikmah — D-IV Sistem Informasi Bisnis | Politeknik
                 Negeri Malang</p>
             <div class="flex gap-6">
                 <a href="https://www.linkedin.com/in/alvi-choirinnikmah-a3a579322"
